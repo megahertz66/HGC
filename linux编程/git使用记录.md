@@ -35,9 +35,9 @@ git help <command>	#获得command的详细内容，会从网页打开
 ##  同步远端仓库
 
 ```shell
-git remote -v		#查看与其他仓库之间的连接
-git fetch <remote>	#remote 就是上一个命令中看到的远程仓库url的名字
-git merge <remote>	#合并到本地文件
+git remote -v				#查看与其他仓库之间的连接
+git fetch <remote>			#remote 就是上一个命令中看到的远程仓库url的名字
+git merge <remote/master>	#合并到本地文件
 ```
 
 ## 解决冲突 （待实践）
@@ -62,5 +62,64 @@ git commit -m 	#我要提交了
 git push		#搞定！
 ```
 
+## 分支太强了，放弃主干怎么办
+
+master只是一个名字，废了，再建。（破而后立）  
+
+```shell
+git branch -D master		#破
+git checkout -b master		#立
+```
+
+## 合并分支
+
+```shell
+git checkout master		#切换到master分支
+git meger --no--ff <要被merge的分支>
+```
+
+## 那些文件名前面的 D M 是什么意思  
+
+- A ：增加的文件
+- C：文件的一个拷贝
+- D：删除一个文件
+- M：文件内容或者mode被修改
+- R：文件名被修改
+- T：文件类型被修改
+- U：文件没有合并（完成合并才能提交）
+- X：未知状态
+
+## fetch & pull
+
+
+```shell
+git fetch <远程主机名>空格<分支名>	#分支名可省略
+
+#更新后返回FETCH_HEAD,本地可通过log查看
+git log -p FETCH_HEAD
+
+#如需同步到本地
+git merge <远程主机名>/<本地分支>
+
+
+#git pull 相当于 fetch 和 merge 的合体
+git pull <远程主机名>空格<远程分支名>:<本地分支名>
+```
+
 。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
