@@ -11,8 +11,9 @@
 ```shell
 git push -f orgin master	#强制提交
  
-git fetch -all				#强制覆盖本地
-git -reset --hard origin/master
+git fetch --all				#强制覆盖本地
+git reset --hard origin/master
+git merge <remote/master>
 ```
 
 ## 远程仓库删除文件或者文件夹  
@@ -78,7 +79,49 @@ git checkout master		#切换到master分支
 git meger --no--ff <要被merge的分支>
 ```
 
+## 本地分支同步远端分支
+
+```shell
+git branch -a 	#可以查看本地和远端的全部分支
+
+git push <远端主机名称> <本地分支>:<远端分支>
+
+#上传本地master分支到远端，如上传的是本地分支，远端分支则被自动创建
+git push origin master	
+#如果省略本地分支，则表示上传一个空的远端分支。即是删除远端分支
+git push : refs/for/master
+#如果远端分支与本地分支存在追踪关系，本地分支与远端分支都可以省略
+git push origin
+#如果只有一个远程分支
+git push
+```
+
+## 远端分支同步本地分支
+
+```shell
+git fetch <远程主机名>	#就是把全部的远程主机更新都拉回本地
+git fetch <远程主机名>空格<分支名>	#拉取指定远端分支
+```
+
+## 版本回滚
+
+**采用git log & git reflog**  
+
+```shell
+git log --pretty=oneline	#在一行显示
+git reflog 	#支持之前所有的commit和reset操作
+
+#回退
+git reset --soft <回退的hash值>		#只是切换回去
+git reset --hard <回退的hash值>		#直接改变本地代码
+
+#使用图形方式更加直观
+git log --grap --pretty=oneline --abbrev-commit
+```
+
 ## 那些文件名前面的 D M 是什么意思  
+
+**就是之前分支没有提交带过来的状态**  
 
 - A ：增加的文件
 - C：文件的一个拷贝
