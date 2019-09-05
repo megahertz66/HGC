@@ -52,7 +52,113 @@ linux初始化路由表的时候是在电脑启动的时候。即使是单机（
 - union strct tcp_op af_tcp; tp_pinfo - TCP options for this socket  
 - **struct socket* sock** 指向BSD的指针
 
-dsa 
+### Connetion Processes
+
+这章节主要介绍了几个函数  
+
+```c
+/* looks up host */
+server = gethostbyname(SEVERNAME);
+/* get socket */
+sockfd = socket(AF_INT, SOCK_STEAM, 0);
+/* set up address */
+address.sin_family = AF_INIT;
+address.sin_port   = htons(PORT_NUM);
+memcpy(&address.sin_addr, server->h_addr, server->h_lenght);
+/* connect to server */
+connect(sockfd, &address, sizeof(address));
+```
+
+**socket call walk-through**
+- 检查调用过程中的错误
+- 为创建cocket对象创建空间
+- 将socket加入INODE列表
+- 关联协议处理函数
+- 保存socket类型与协议类型
+- 设置socket为关闭状态
+- 初始化数据包队列  
+
+----
+**connect call walk-through**
+- 检查错误
+- 确定路径描述
+	- 检查路由表现有的条目
+	- 在FIB中找到目标
+	- 创建新的路由表条目
+	- 将新的条目放如路由表中并返回
+
+- 在socket中储存指向路径条目的指针
+- 调用协议中特定的处理函数
+- 设置socket状态为已建立
+
+----
+
+**close call walk-through**  
+- 检查错误（比如，这个socket是否存在）
+- 设置socket状态为disconnect，防止继续使用
+- 针对不同的协议动作
+- 释放socket数据结构（TCP/UDP and INET）
+- 从INODE列表中移除socket
+  
+## 4.5 Linux Function  
+
+	这节就厉害了，全面介绍了源码在内核中的位置以及他们都干了什么！  
+
+## 第五章 send the messages  
+
+![send-walk-through](./picture-for-note/sendWalk-Through.png)  
+
+**creating a packet to UDP**  
+- 检查错误。比如：数据是不是过大？这个连接是不是UDP连接
+- 确定路径目标（如果路径没有创建，就调用IP routing 去创建）
+- 为数据包创建UDP信息头部
+- 调用IP建立与发送函数
+  
+**creating a packet with TCP**  
+- 检查连接，是否建立，是否打开，socket套接字是否正常工作
+- 检查时候需要合并数据包或者拆分数据包
+- 创建数据缓冲区
+- 从用户拷贝数据到缓冲区
+- 将数据包添加至未绑定的队列中
+- 添加TCP信息头部
+- 调用IP层传输模块
+
+**wraping a packet in IP**  
+- 如果是UDP则，创建数据包缓冲区
+- 如果是TCP， 查找目的路径
+- 填充IP头部
+- 从用户空间拷贝头部传输头部和包数据
+- 发送包到目的路径的驱动的输出函数
+
+**Transmitting a packet**  
+- 发送数据包到驱动的输出队列
+- 唤醒驱动
+- 等待得到cpu调度
+- 驱动检查传输媒介
+- 添加链路头部
+- 调用总线将数据包发送至媒介
+
+## 第六、第七章待补充  
+
+## 第八章  Basic Internet Protocol Routing   
+
+*这章中假定的计算机是一个连接在局域网中，另一台连接到 Internet 上，彼此之间有连接。*  
+
+**重点开始！**
+	neighbor table 中记录了计算机硬件的主机上的连接。其中的信息包括了，设备连接对应的neighbor，以及使用何种协议去交换数据。linux使用Address Resolution Protocol（ARP），去维护和更新neighbor上的数据。数据被动态的添加在nrighbor上，但是如果到达某些时间而不去使用，数据则会最终失效(eventually disappear), 管理员也可以设置数据是长期有效的。  
+	Linux设置两张复合的routing table去维护IP address。一个是通用的转发信息表（Forwarding Information Base---FIB）记录了全部地址的路径，另一个是一个很小但是素的很快的couting cache对那些频繁使用的路径使用。Ip需要找到对应的路径的时候会首先找cache而后在FIB中搜索。如果在FIB中搜索到，则将该条目添加到cache中。如果cache中的条目长期未被使用，那就将被淘汰。  
+	
+### Routing table  
+**要注意字节序的问题**(host byte order  and  network byte order)  
+
+neighbor table:  
+-----
+![neighbor table](./picture-for-note/neighbor-table.png)  
+
+	neighbor table中的表项并不是持久的，在近期没有接入网络的情况下可能是空的表，在近期所有连接都是在几个计算机之间的，该表中可能记录了计算机的物理连接。该表中包括了地址、驱动、协议和状态信息。
+	struct neigh_table *neight_tables 作为全局指针指向neightbor table。其中包括了一套常用的函数和数据以及哈希表，关于整套neightbor的细节信息。底层表包括例如传输的大致时间、队列长度、驱动指针、和一一些驱动函数的详细信息。
+
+## 内容有点干吧，都是对函数进行说明，回头再看。去看linux网络编程
 
 
 

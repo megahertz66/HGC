@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>SayHello</title>
+</head>
+
+<body>
+	<h1>请输入您的名字：</h1>
+	<input id="HisName" type="text" onkeydown="printName(event)">
+</body>
+	<script type="text/javascript">
+	function printName(event){
+		//alert(event.keyCode);
+		if(event.keyCode == 13){
+			userName = document.getElementById("HisName").value;
+			alert("Hello, "+userName+", Nice to meet you!");
+		}
+	}
+	</script>
+</html>
