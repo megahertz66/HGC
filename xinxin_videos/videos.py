@@ -1,23 +1,16 @@
 import requests
-import re
 
-file = open("originVideos.m3u8")
-url = ''
-i = 0
+def downLoadThread(path, num):
+    pathLengh = len(path)
+    pass
 
 
-while True:
+def dowLoadFile(fileUrl):
+    r = requests.get(fileUrl)
+    openUrl = fileUrl[:fileUrl.rfind(".")-1]+".ts"
+    with open(openUrl , "wb") as code:
+        code.write(r.content)
+    return openUrl
 
-    fileInLine = file.readline()
-    if not fileInLine:
-        break
-    fileUrl = re.findall(r'^http\S+', str(fileInLine))
-    if len(fileUrl):
-        i = i+1
-        url = str(fileUrl[0])
-        print(url)
-        r = requests.get(url)
-        tmpFileName = "file%d"% i
-        with open("./videos/"+str(tmpFileName)+".ts", "wb") as code:
-             code.write(r.content)
+
 
