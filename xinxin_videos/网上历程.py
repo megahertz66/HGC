@@ -75,6 +75,7 @@ def before_merge():
     # print(shell_str)
     shell_str = 'copy /b ' + shell_str + ' 5.mp4'+'\n'+'del *.ts'
     return shell_str
+    
 def wite_to_file(cmdString):
     cwd = os.getcwd()  # 获取当前目录即dir目录下
     print("------------------------current working directory------------------"+cwd)
