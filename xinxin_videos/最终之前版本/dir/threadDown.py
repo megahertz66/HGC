@@ -1,22 +1,36 @@
 import threading
 import requests
+import os
+
+# 进度管理模块
+def progressBar(value):
+    global O_progress
+
+    if value == 1:
+        if mutex.acquire():
+            O_progress += 1
+            mutex.release()
+    return O_progress
 
 # 根据完整的文件路径信息进行下载，
 # 保存的位置就是路径所在位置，文件名称最后以.ts结尾
 def dowLoadFile(fileUrl):
-    r = requests.get(fileUrl)
+    a = os.path.normpath(fileUrl)
+    r = requests.get(a)
     openUrl = fileUrl[:fileUrl.rfind(".")-1]+".ts"
     with open(openUrl , "wb") as code:
         code.write(r.content)
     return openUrl
 
+
 # 每次下载的文件个数以及在列表中所在的位置
 def downPros(file_path, down_num, region):
     for i in range(0, down_num):
-        # dowLoadFile(file_path[region + i])
-        print(file_path[region + i])
+        dowLoadFile(file_path[region + i])
+        progressBar(1)
+        #print(file_path[region + i])
 
-
+mutex = threading.Lock()
 def threadRun(file_path, thread_num, dir_num):
 
     down_num = 0

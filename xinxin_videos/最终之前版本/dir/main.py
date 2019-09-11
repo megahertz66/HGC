@@ -1,15 +1,11 @@
 import tkinter
 from tkinter.filedialog import askdirectory
 from tkinter import ttk
-
+import time
 import threadDown
 from getVideos import getEveryM3u8
+from mergeDirFile import mergeDirFile
 
-
-global O_path 
-global O_maxPro
-global O_button
-global O_canvas
 
 # 显示标题
 # 
@@ -57,18 +53,32 @@ def putScale(where):
 
 # 放置开始按钮
 #
-def putButton(where):
-    button1 = tkinter.Button(where, text="开始下载", command=func, width='10', height='2')
+def putStartButton(where):
+    button1 = tkinter.Button(where, text="开始下载", command=Startfunc, width='10', height='2')
     button1.pack(expand='no', fill='none')
     return button1
 
-# 按钮动作
-def func():
+# 放置合并按钮
+#
+def putMergeButton(where):
+    button1 = tkinter.Button(where, text="开始合并", command=mergeFun, width='10', height='2')
+    button1.pack(expand='no', fill='none')
+    return button1
+
+# 开始按钮动作
+def Startfunc():
+    global dirLen
     # print(getEveryM3u8(O_path.get()))
     # print(O_maxPro.get())
-    threadDown.threadRun(getEveryM3u8(O_path.get()), O_maxPro.get(), len(getEveryM3u8(O_path.get())))
-    O_button["text"] = "正在下载"
-    O_button["state"] = "disable"
+    dirLen = len(getEveryM3u8(O_path.get()))
+    threadDown.threadRun(getEveryM3u8(O_path.get()), O_maxPro.get(), dirLen)
+    O_startButton["text"] = "正在下载"
+    O_startButton["state"] = "disable"
+
+# 合并按钮动作
+def mergeFun():
+    #print(O_path.get())
+    mergeDirFile(O_path.get())
 
 # 放置进度条
 def putHorizontalBar(where):
@@ -80,18 +90,23 @@ def putHorizontalBar(where):
 
 # 进度条动作, 最好不要每次都更新进度条
 def barAction(O_bar, whereBar,  now, all):
-    pos =  (now * 400) // all
+    if all == 0:
+        pos =  now  // (all + 1)
+    else:
+        pos = now // all
+    print(pos)
     O_bar.create_rectangle(0, 0, pos, 25, fill="green")
     whereBar.update()
-
 
 ####################################################################################################
 
 def main():
-    global O_path 
+    global O_path
     global O_maxPro
-    global O_button
+    global O_startButton
+    global O_mergeButton
     global O_canvas
+    global dirLen
 
     #建立窗口
     win = tkinter.Tk()
@@ -110,9 +125,12 @@ def main():
     # 放置滑块frame
     frameScale = ttk.Frame(frameRoot)
     O_maxPro =  putScale(frameScale)
-    # 放置按钮
-    frameButton = ttk.Frame(frameRoot)
-    O_button = putButton(frameButton)
+    # 放置开始按钮
+    frameStartButton = ttk.Frame(frameRoot)
+    O_startButton = putStartButton(frameStartButton)
+    # 放置合并按钮
+    frameMergeButton = ttk.Frame(frameRoot)
+    O_mergeButton = putMergeButton(frameMergeButton)
     # 放置进度条
     frameBar = ttk.Frame(frameRoot)
     O_canvas = putHorizontalBar(frameBar)
@@ -121,12 +139,10 @@ def main():
     frameTitle.pack(pady=40)
     frameSelect.pack(pady=40)
     frameScale.pack(pady=40)
-    frameButton.pack(pady=20)
+    frameStartButton.pack(pady=10)
+    frameMergeButton.pack(pady=10)
     frameBar.pack()
 
-    for i in range(0, 10000, 10):
-        barAction(O_canvas, frameBar, i, 10000)
-        print(i)
 
     win.mainloop()
 
