@@ -1,6 +1,8 @@
 import tkinter
 from tkinter.filedialog import askdirectory
 from tkinter import ttk
+import os
+from getVideos import getEveryM3u8
 
 global O_path 
 global O_maxPro
@@ -59,8 +61,11 @@ def putButton(where):
 
 # 按钮动作
 def func():
-    print(O_path.get())
-    print(O_maxPro.get())
+    #print(getEveryM3u8(O_path.get()))
+    #print(O_maxPro.get())
+
+    threadRun(getEveryM3u8(O_path.get()), O_maxPro.get(), len(getEveryM3u8(O_path.get())))
+
     O_button["text"] = "正在下载"
     O_button["state"] = "disable"
 
