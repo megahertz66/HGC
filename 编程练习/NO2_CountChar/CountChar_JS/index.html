@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CountChar</title>
+</head>
+    <body>
+        <h2>请输入您要输入的字符串：</h2>
+        输入：<input id="userInput" type="text" placeholder="请输入您要输入的字符串" onkeydown="printNnum()">
+        <br>
+        输出：<input id="userOutput" type="text" >
+    </body>
+    <script type="text/javascript">
+        function printNnum(){
+            userIn = document.getElementById("userInput");
+            outNum = userIn.value
+            document.getElementById("userOutput").value = outNum.length
+        }
+    </script>
+</html>

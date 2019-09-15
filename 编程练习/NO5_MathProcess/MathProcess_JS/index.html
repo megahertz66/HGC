@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>MathProcess</title>
+
+<style type="text/css">
+    .containTitle{
+        text-align: center;
+    }
+    div.mainPos{
+        text-align: center;
+        vertical-align:middel;
+    }
+    input{
+        text-align: center;
+        margin-bottom: 100px;
+    }
+    p{
+        line-height: 80px;
+
+    }
+    .main2Pos{
+        width: 800px;
+        height: 400px;
+        background-color: rgb(127, 255, 180);
+        margin: 0 auto;
+    }
+</style>
+</head>
+<body>  
+    <h2 class="containTitle">MathProcess</h2>
+    <div class="mainPos">
+        <input id="firstNum" type="text" placeholder="What is first number?" onkeydown="printNums()">
+        <input id="secondNum" type="text" placeholder="what is second number?" onkeydown="printNums()">
+        <div class="main2Pos">
+            <p id="result1"> XXX </p>
+            <p id="result2"> XXX </p>
+            <p id="result3"> XXX </p>
+            <p id="result4"> XXX </p>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+function printNums(){
+    var num1 = document.getElementById("firstNum").value * 1;
+    var num2 = document.getElementById("secondNum").value * 1;
+    var stringPrint1 = num1 +"+"+ num2+"="+(num1+num2)
+    var stringPrint2 = num1 +"-"+ num2+"="+(num1-num2)
+    var stringPrint3 = num1 +"*"+ num2+"="+(num1*num2)
+    var stringPrint4 = num1 +"/"+ num2+"="+(num1/num2)
+    document.getElementById("result1").innerHTML = stringPrint1;
+    document.getElementById("result2").innerHTML = stringPrint2;
+    document.getElementById("result3").innerHTML = stringPrint3;
+    document.getElementById("result4").innerHTML = stringPrint4;
+}
+
+</script>
+</html>
