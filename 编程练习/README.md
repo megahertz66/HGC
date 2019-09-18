@@ -76,6 +76,24 @@ TODO: 为什么例子里面没有提示每个披萨分成几块？
 ```
 you will need 2 gallons of 
 paint to 360 square feet.
+```  
+
+## 自动结账  
+
+创建一个简单的自助结账系统。提示输入3 种商品各自的价格和数、量。计算税前总价。然后以5.5%的税率计算税额。打印商品的数量  
+和总价，然后打印税前总价、税额和总价。  
+
+```
+示例输出:
+Enter the price of item 1: 25
+Enter the quantity of item 1: 2
+Enter the price of item 2: 10
+Enter the quantity of item 2: 1
+Enter the price of item 3: 4
+Enter the quantity of item 3: 1
+Subtotal: $64.00
+Tax: $3.52
+Total: $67.52
 ```
 
 
