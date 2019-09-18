@@ -1,8 +1,9 @@
 ##ignore this file##
 
-./codeblock-space/cXML-test/bin
-./codeblock-space/cXML-test/obj
+bin/
+obj/
 *.exe
 *.o
 *.layout
-*.cpb
+*.depend
+*.cbp

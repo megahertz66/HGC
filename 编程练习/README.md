@@ -51,7 +51,34 @@ What is your current age? 25
 At what age would you like to retire? 65
 You have 40 years left until you can retire.
 It's 2015, so you can retire in 2055.
+```  
+
+## 07 披萨聚会  
+
+根据用餐人数、披萨数，以及每个披萨分成几块。确保平均分配。  
+显示每个人能分到的块数。如果有剩余，则显示。  
+
 ```
+How many people? 8
+How many pizzas do you have? 2
+
+8 people with 2 pizzas.
+Each person gets 2 pieces of pizzas.
+there are 0 leftover pieces.
+```
+TODO: 为什么例子里面没有提示每个披萨分成几块？  
+
+## 09 涂料计算器  
+
+根据提示输入长和宽。假设1加仑涂料可以粉刷340平方英尺的墙面。  
+以整数形式显示粉刷该房间需要的涂料加仑数量。  
+
+```
+you will need 2 gallons of 
+paint to 360 square feet.
+```
+
+
 
 
 
