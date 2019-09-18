@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>PaintWall</title>
+    <style type="text/css">
+    h2{
+        text-align: center;
+    }
+    .whatRoom{
+        margin: 0 auto;
+        display: -webkit-box;
+        -webkit-box-orient: horizontal;
+        -webkit-box-pack: center;
+        -webkit-box-align: center;
+    }
+    .mainInput{
+        text-align: center;
+        /* vertical-align: middle; */
+    }
+    .mainOutput{
+        margin: 0 auto;
+        text-align: center;
+        color: chartreuse;
+        line-height: 80px;
+        width: 400px;
+        height: 200px;
+        background-color: cadetblue;
+    }
+    </style>
+</head>
+<body>
+<h2>PaintWall</h2>
+<div class="whatRoom">
+    <input id="radio-1" name="roomStyle" type="radio" value="" checked/>
+    <label for="radio-1">矩形</label>
+    <input id="radio-2" name="roomStyle" type="radio" value="" />
+    <label for="radio-2">圆形</label>
+    <input id="radio-3" name="roomStyle" type="radio" value="" />
+    <label for="radio-3">L形</label>
+</div>
+<div class="mainInput">
+    <hr>
+    <!-- 使用js更换input的placeholder属性 -->
+    <span id="span1">X：</span><input id="input1" class="input-1" id="along" type="text">
+    <span id="span2">X：</span><input id="input2" class="input-2" id="wight" type="text">
+    <button onclick="startNow()">计算</button>
+</div>
+<div class="mainOutput">
+    <P>You will need to purchase * gallons of<br>paint to cover * square feet.</P>
+</div>
+</body>
+<script type="text/javascript">
+    var whatCheck = 0;
+    function startNow(){
+        // 判断哪个选项被选择。
+        var radios = document.getElementsByName("roomStyle");
+        for(var i=0; i<radios.length; i++){
+            if(radios[i].checked){
+                whatCheck = i;
+            }
+        }
+        // 根据选择改写提示信息
+        switch(whatCheck){
+            case 0 :{
+                document.getElementById("span1").innerHTML = "长：";
+                document.getElementById("span2").innerHTML = "宽：";
+            }break;
+            case 1 :{
+                document.getElementById("span1").innerHTML = "半径：";
+                document.getElementById("span2").innerHTML = "无效：";
+            }break;
+            case 2 :{
+                document.getElementById("span1").innerHTML = "尚未：";
+                document.getElementById("span2").innerHTML = "实现：";
+                document.getElementById("input1").setAttribute("placeholder", "没用！");
+            }
+        }
+
+    }
+
+
+</script>
+</html>
+
+
+
+
+<!--     
+    function isRealNum(val){
+    // isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除
+        if(val === "" || val ==null){
+            return false;
+        }
+        if(!isNaN(val)){
+            return true;
+        }else{
+            return false;
+        }
+    } 
+
+    function isNumber(val){
+    var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+    var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+        if(regPos.test(val) && regNeg.test(val)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    function isNotANumber(inputData) { 
+　　//isNaN(inputData)不能判断空串或一个空格 
+　　//如果是一个空串或是一个空格，而isNaN是做为数字0进行处理的，而parseInt与parseFloat是返回一个错误消息，这个isNaN检查不严密而导致的。 
+    　　if (parseFloat(inputData).toString() == “NaN”) { 
+    　　　　//alert(“请输入数字……”); 
+    　　　　return false; 
+    　　} else { 
+    　　　　return true; 
+    　　} 
+    }
+ -->
