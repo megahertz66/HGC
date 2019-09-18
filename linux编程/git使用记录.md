@@ -6,6 +6,25 @@
 ![git流程](./picture-for-note/gitok.png)  
 
 
+## 几个关于GIT的问题  
+
+1.   
+	问：如果我和别人都克隆同一个项目别人提交我也提交，这会是怎么样的一个场景？  
+	答：只有当你有所克隆服务器的写入权限，并且之前没有人推送过时，push命令才能生效。 当你和其他人在同一时
+		间克隆，他们先推送到上游然后你再推送到上游，你的推送就会毫无疑问地被拒绝。 你必须先将他们的工作拉
+		取下来并将其合并进你的工作后才能推送。  
+
+## 别名  
+
+这个功能可以有效的让你省打几个字来实现命令，但是估计用久了原本的命令就忘记了吧，汗！  
+
+```shell
+$ git config --global alias.co checkout
+$ git config --global alias.br branch
+$ git config --global alias.ci commit
+$ git config --global alias.st status
+```
+
 ## 强制覆盖本地与提交
 
 ```shell
@@ -17,6 +36,14 @@ git merge <remote/master>
 ```
 
 ## 远程仓库删除文件或者文件夹  
+  
+**要从 Git 中移除某个文件，就必须要从已跟踪文件清单中移除（确切地说，是从暂存区域移除），然后提交。**
+**如果删除之前修改过并且已经放到暂存区域的话，则必须要用强制删除选项 -f（译注：即 force 的首字母）。**  
+
+### 删除远程仓库并且从暂存区删除  
+  
+加入 --cached命令
+` $ git rm --cached XXX `
 
 ```shell
 git pull origin master		#拉取远程仓库项目
@@ -101,7 +128,33 @@ git push
 ```shell
 git fetch <远程主机名>	#就是把全部的远程主机更新都拉回本地
 git fetch <远程主机名>空格<分支名>	#拉取指定远端分支
-```
+```  
+
+## 撤销操作  
+  
+如果提交发现漏了几个文件，可以使用如下命令，使得最终只有一个提交  
+   
+```shell
+$ git commit -m 'initial commit'
+$ git add forgotten_file
+$ git commit --amend
+```  
+
+## 取消暂存文件  
+
+
+如果提交的时候发现提交多了（到暂存区），可以使用：  
+
+```shell
+$ git reset HEAD XXXXX
+``` 
+
+## 撤销修改  
+
+如果你对一个文件改来改去懵了，还不如不改，或者干脆重改（回复到上次提交的状态）：  
+
+`$ git checkout[空格]--[空格]<file>`
+
 
 ## 版本回滚
 
@@ -149,7 +202,15 @@ git merge <远程主机名>/<本地分支>
 git pull <远程主机名>空格<远程分支名>:<本地分支名>
 ```
 
-。
+## 文件改名  
+
+```shell
+$ git mv file_from file_to
+#此命令视同如下三条命令：
+$ mv README.md README
+$ git rm README.md
+$ git add README
+```
 
 
 
