@@ -24,7 +24,8 @@ int main()
     double Subtotal = 0.0 ,Tax = 0.0, Total = 0.0;
     MemList * structSave = (MemList *)calloc(1, sizeof(MemList));
     MemList * head = structSave;
-    //MemList * tmp = head;
+	MemList * needFree = NULL;
+    
     printf("If you want to exit. Please enter q\n");
     while(1){
         MemList * tempStruct = NULL;
@@ -44,7 +45,12 @@ int main()
         structSave->next = tempStruct;
         structSave = structSave->next;
     }
+	
+	// free and get Subtotal
+	needFree = head;
     for(head=head->next; head!=NULL; head=head->next){
+		free(needFree);
+		needFree = head;
         Subtotal += head->price * head->quant;
     }
 
