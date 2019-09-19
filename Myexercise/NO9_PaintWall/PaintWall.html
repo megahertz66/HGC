@@ -31,8 +31,8 @@
 </head>
 <body>
 <h2>PaintWall</h2>
-<div class="whatRoom">
-    <input id="radio-1" name="roomStyle" type="radio" value="" checked/>
+<div class="whatRoom" onclick="printMess()">
+    <input id="radio-1" name="roomStyle" type="radio" value="" />
     <label for="radio-1">矩形</label>
     <input id="radio-2" name="roomStyle" type="radio" value="" />
     <label for="radio-2">圆形</label>
@@ -44,15 +44,31 @@
     <!-- 使用js更换input的placeholder属性 -->
     <span id="span1">X：</span><input id="input1" class="input-1" id="along" type="text">
     <span id="span2">X：</span><input id="input2" class="input-2" id="wight" type="text">
-    <button onclick="startNow()">计算</button>
+    <button onclick="calcRrea()">计算</button>
 </div>
 <div class="mainOutput">
-    <P>You will need to purchase * gallons of<br>paint to cover * square feet.</P>
+    <P id="printResult">You will need to purchase * gallons of<br>paint to cover * square feet.</P>
 </div>
 </body>
 <script type="text/javascript">
     var whatCheck = 0;
-    function startNow(){
+    var whatGallon = 0;
+    var whatArea = 0;
+
+    function isRealNum(val){
+        // isNaN()函数 把空串 空格 以及NUll 按照0来处理 所以先去除
+            if(val === "" || val ==null){
+                return false;
+            }
+            if(!isNaN(val)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    
+
+    function printMess(){
         // 判断哪个选项被选择。
         var radios = document.getElementsByName("roomStyle");
         for(var i=0; i<radios.length; i++){
@@ -73,13 +89,43 @@
             case 2 :{
                 document.getElementById("span1").innerHTML = "尚未：";
                 document.getElementById("span2").innerHTML = "实现：";
-                document.getElementById("input1").setAttribute("placeholder", "没用！");
+                //document.getElementById("input1").setAttribute("placeholder", "没用！");
             }
         }
-
     }
 
+    function calcRrea(){
 
+        var firstInput = document.getElementById("input1").value;
+        var secondInput = document.getElementById("input2").value;
+        // 计算
+        if(0 == whatCheck){
+            // 判断input输入是否为数值
+            if(!isRealNum(firstInput)){
+                alert("请输入数值!");
+                document.getElementById("input1").value = "";
+                return 0;
+            }
+            if(!isRealNum(secondInput)){
+                alert("请输入数值!");
+                document.getElementById("input2").value = "";
+                return 0;
+            }
+            whatGallon = Math.ceil(firstInput * secondInput / 360);
+            whatArea = Math.round(firstInput * secondInput * 100)/100 ;
+        }
+        if(1 == whatCheck){
+            // 判断input输入是否为数值
+            if(!isRealNum(firstInput)){
+                alert("请输入数值!");
+                document.getElementById("input1").value = "";
+                return 0;
+            }
+            whatGallon = Math.ceil( Math.pow(firstInput, 2) * 3.14 /360);
+            whatArea = Math.round( Math.pow(firstInput, 2) * 3.14 * 100)/100;
+        }
+        document.getElementById("printResult").innerHTML = "You will need to purchase "+whatGallon+" gallons of <br> paint to cover "+whatArea+" square feet.";
+    }
 </script>
 </html>
 
@@ -99,6 +145,7 @@
         }
     } 
 
+    // 测试不好用
     function isNumber(val){
     var regPos = /^\d+(\.\d+)?$/; //非负浮点数
     var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
@@ -108,7 +155,8 @@
             return false;
         }
     }
-
+    
+    // 测试vscode提示有语法错误，没有使用
     function isNotANumber(inputData) { 
 　　//isNaN(inputData)不能判断空串或一个空格 
 　　//如果是一个空串或是一个空格，而isNaN是做为数字0进行处理的，而parseInt与parseFloat是返回一个错误消息，这个isNaN检查不严密而导致的。 
