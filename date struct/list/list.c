@@ -2,60 +2,77 @@
 #include <malloc.h>
 #include "list.h"
 
-list_t  pList;
-
-int initList() 
+// 初始化链表
+list_t * initList()
 {
-	pList.pHead = NULL;
-	pList.pTail = NULL;
-	return RET_OK;
+	list_t * pList;
+	pList = (list_t *)malloc(sizeof(list_t));
+	memset(pList, 0, sizeof(list_t));
+	return pList;
 }
 
-int freeList()
+// 删除链表
+list_t * deleteList(list_t * pList)
 {
-	node_t * delNode = pList.pHead;
+	node_t * delNode = NULL;
 	node_t * tmpNode = NULL;
 
+	if(NULL == pList)
+	{
+		return NULL;
+	}
+	delNode = pList->pHead;
 	while(delNode)
 	{
 		tmpNode = delNode->next;
-		free(delNode->data);
+		if(NULL != delNode->data)
+		{
+			free(delNode->data);
+		}
 		free(delNode);
 		delNode = tmpNode;
 	}
-
-	pList.pHead = NULL;
-	pList.pTail = NULL;	
+	free(pList);
+	return NULL;
 }
 
-int insertNode(void * Data)
+// 插入节点
+node_t * insertNode(list_t * pList, void * pData)
 {	
 	node_t * node;
 	
-	node = (node_t *)malloc(sizeof(node_t));
-	node->data = Data;
-	if (NULL == pList.pHead)
+	if(NULL == pList)
 	{
-		pList.pHead = node;
-		pList.pTail = node;
+		return NULL;
+	}
+	node = (node_t *)malloc(sizeof(node_t));
+	node->data = pData;
+	node->next = NULL;
+	if (NULL == pList->pHead)
+	{
+		pList->pHead = node;
+		pList->pTail = node;
 	}
 	else
 	{
-		pList.pTail->next = node;
-		pList.pTail = node;
+		pList->pTail->next = node;
+		pList->pTail = node;
 	}
-	return;
+	pList->count++;
+
+	return node;
 }
 
-int findNode(void *pKey, int (*finder)(void *pKey, void *pData))
+// 查找结点/修改结点
+node_t * findNode(list_t * pList, void *pKey, int (*finder)(void *pKey, void *pData))
 {
-	node_t * pTmp = pList.pHead;
+	node_t * pTmp = NULL;
 
-	if(NULL == pTmp)
+	if(NULL == pList)
 	{
-		return RET_NOTFIND;
+		return NULL;
 	}
-
+	pTmp = pList->pHead;
 	while(pTmp)
 	{
 		if(0 == finder(pKey, pTmp->data))
@@ -65,16 +82,68 @@ int findNode(void *pKey, int (*finder)(void *pKey, void *pData))
 		pTmp = pTmp->next;
 	}
 	
-	return RET_OK;
+	return pTmp;
 }
 
-int deleteNode()
+// 删除节点
+node_t * freeNode(list_t * pList, void *pKey, int (*compare)(void *pKey, void *pData))
 {
+	node_t * delNode = NULL;
+	node_t * tmpNode = NULL;
+	node_t * result = NULL;
 
-	return ;
+	if(NULL == pList)
+	{
+		goto err;
+	}
+	delNode = pList->pHead;
+	if(0 == compare(pKey, delNode->data))
+	{
+		pList->pHead = delNode->next;
+		free(delNode->data);
+		free(delNode);
+		goto err;
+	}
+
+	delNode = pList->pHead->next;
+	tmpNode = pList->pHead;
+	while(delNode)
+	{
+		if(0 == compare(pKey, delNode->data))
+		{
+			tmpNode->next = delNode->next;
+			free(delNode->data);
+			free(delNode);
+			goto err;
+		}
+		tmpNode = delNode;
+		delNode = tmpNode->next;
+	}
+err:
+	return result;
 }
 
-void listSort()
+// 链表top
+node_t * toplist(list_t * pList)
 {
-	
+	return pList->pTail;
+}
+
+// 反转链表
+list_t * reversList(list_t * pList)
+{
+	list_t * reList = pList;
+	node_t * newHead = NULL;
+	node_t * newTail = pList->pHead;
+	node_t * head = pList->pHead;
+	if(head == NULL) return NULL;
+	while(head != NULL){
+		node_t * tmp = head->next;
+		head->next = newHead;
+		newHead = head;
+		head = tmp;
+	}
+	reList->pHead = newHead;
+	reList->pTail = newTail;
+	return reList;
 }
