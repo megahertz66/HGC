@@ -1,0 +1,11 @@
+# 使用MD5检测文件完整性  
+
+linux下：  
+使用 md5sum 命令
+`md5sum ./test.c`  
+
+windows 下：  
+使用cmd命令  
+`certutil -hashfile test.c MD5`  
+
+这样就可以对生成的MD5进行对比，查看文件是否完整。  
