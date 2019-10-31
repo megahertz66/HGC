@@ -38,6 +38,7 @@ void merge(int input[] ,int head, int middle, int tail, int output[])
  {
     int *output = (int *)malloc(sizeof(int)*lenght);
     recursion_sort(input, 0, lenght-1, output);
+    free(output);
     return;
  }
 
