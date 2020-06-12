@@ -118,12 +118,82 @@ static struct cache_names __initdata cache_names[] = {
 	{NULL,}
 #undef CACHE
 };
+```
+
+直接就蒙了，后来才明白(其实一点都没明白)。
+
+之前以为~~这种初始化在声明的时候才会调用到里面的`#include`中的头文件，而头文件中就是一大堆关于
+`CHANE`的声明。~~ 其实根本不是，经过实验（下面有实验代码）。这种声明方式只是在头文件的展开
+位置是位于`#define & #undef` 之间。如果这个头文件中包含了别的宏，那么是否可以使用要看这个
+头文件在文件中定义的物理位置（就是#define XXX 之前还是之后），如果是之前的话就可以使用，
+如果是之后的话就不可以使用。**哪怕是这个宏被写在了某一个函数之中，那么调用过这个函数之后仍不能
+认为是在调用函数位置定义头文件！**  
+
+**实验代码：**  
 ```c
+/*
+	main 文件
+*/
+#include <stdio.h>
 
-直接就蒙了，后来才明白。
+void test_function(void);
 
-这种初始化在声明的时候才会调用到里面的`#include`中的头文件，而头文件中就是一大堆关于
-`CHANE`的声明。  
+
+int main()
+{
+    //printf("in main func %d\n", PPP);  此时调用会报错
+    test_function();
+    //printf("in main func %d\n", PPP); // 此时调用会报错
+
+#define CHACHE(X)  {printf("in main %d\n", X);}  
+#include "print.h"
+int c = 10;
+printf(" print C = %d\n", c);
+printf("in main func %d\n", PPP);
+#undef CHACHE
+
+printf(" print C = %d\n", c);
+    return 0;
+}
+
+void test_function(){
+
+#define CHACHE(X) {printf("in func %d\n", X);}    
+#include "print.h"
+#undef CHACHE
+
+}
+
+
+/*
+	头文件
+*/
+#define PPP     1234
+CHACHE(123456)
+CHACHE(456723)
+CHACHE(345645)
+CHACHE(12123)
+CHACHE(90)
+
+/*
+	输出
+*/
+in func 123456
+in func 456723
+in func 345645
+in func 12123
+in func 90
+in main 123456
+in main 456723
+in main 345645
+in main 12123
+in main 90
+ print C = 10
+in main func 1234
+ print C = 10
+```
+
+
 ```c
 ........
 
